@@ -1,0 +1,53 @@
+<html>
+<head>
+  <title>Parallel Football</title>
+</head>
+
+<body>
+  <h1>Project 1: Parallel Football</h1>
+  
+  <p>Parallel Football is a team game played by four teams on a common 32x32 grid.  Each team has <em>p</em> players, each of whom occupies a cell on the grid.  Cells can have multiple players on them.
+  </p>
+  
+  <p>Each team has a home cell that is a corner of the grid. Every cell except the four home cells starts with a football occupying the cell.  Thus, there are 1020 footballs in total.  The aim of each team is to kick as many of these balls to the team's home cell as possible.
+  </p>
+  
+  <p>Before the game starts, each team selects starting positions for each of the team's <em>p</em> players.  The starting positions may be anywhere on the grid.
+  </p>
+  
+  <p>On a single turn, a player may move one cell in any direction, including diagonally, or stay put.  Alternatively, if the cell contains a football, the player may choose to remain in the cell and kick a football.  Players have a range of <em>k</em> cells for their kicks, where <em>k</em> is an integer between 1 and 46 (why 46?).  A player can kick the ball to any cell within a Euclidean radius of <em>k</em> of the player's cell, measuring from the center of the source and target cells.  The ball lands in the target cell and stays there (the players are very accurate, and the balls hardly roll).  Cells can accumulate an arbitrary number of balls, but a player can only kick one ball at a time.
+  </p>
+  
+  <p>If a ball lands at a team's home cell, the ball is immediately removed from the game and the team scores a point.  While nearby balls can be kicked to the home cell with one kick, many (the precise number depends on <em>k</em>) will need multiple kicks.  Other teams are also competing for the same balls, and it is possible that some balls will be shuffled backwards and forwards several times by opposing teams.
+  </p>
+  
+  <p>If there are multiple players on a cell trying to kick a football, they can all succeed if there are enough footballs for all of them.  If a cell contains fewer footballs than players attempting to kick, then the simulator will assign the remaining footballs to players at random.  A player who misses out on a football in this situation simply stays put.
+  </p>
+  
+  <p>Your job is to write a program to coordinate the actions of your players.  You will have access to complete information about the state of the game (where all the players and footballs are, and the current score), and are expected to generate a set of instructions for your players.  All teams' orders are revealed and processed simultaneously.
+  </p>
+  
+  <p>The game ends when there are no footballs remaining on the field. We will also include a time-out so that if the game seems to be going on forever (e.g., a football gets stuck in an infinite loop being kicked backwards and forwards between two players) it is stopped after a large number of moves.
+  </p>
+  
+  <p>For the tournament, the scores of the teams will be accumulated over many games played against a variety of opponents.  Teams will be ranked by average score.  We'll run a sub-tournament for several
+combinations of <em>p</em> and <em>k</em> to be chosen in class discussions.
+  </p>
+  
+  <p>Some things to think about:
+    
+    <ul>
+      <li>What is a time-efficient way of clearing a field of footballs when there are no opponents nearby?</li>
+      <li>How might you balance activity between regions near the home cell and more distant regions?</li>
+      <li>How much scope is there for teamwork?  For example, can you set up the equivalent of a bucket brigade?  Would that be a good use of resources?</li>
+      <li>Is there any payoff in trying to disrupt other teams' activities?</li>
+      <li>Would some degree of randomization be a good idea?</li>
+    </ul>
+  </p>
+  
+</body>
+</html>
+
+
+
+

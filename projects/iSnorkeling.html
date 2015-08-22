@@ -1,0 +1,52 @@
+<html>
+<head>
+  <title>iSnorkeling</title>
+</head>
+
+<body>
+  <h1>Project 4: iSnorkeling</h1>
+  
+  <p>The Happy Snorkeling Company offers a new twist on the standard snorkeling excursion. Snorkelers take with them a waterproof device called an iSnork that resembles an iWatch, and allows them to communicate with each other while in the water. Exactly how this communication works will be described in more detail below.
+  </p>
+  
+  <p>The happiness of a snorkeler depends on what she sees during her 8-hour expedition. There are many kinds of sealife, and for each different kind of creature there is a happiness score for seeing one of them. Seeing a second creature of a given kind scores only 50% of that score, and the third time yields 25%. After that, seeing more of the same creature is boring, and gives no additional happiness. (Seeing the same individual a second time earns no happiness points; these are experienced snorkelers who can recognize individual creatures!)</p>
+  
+ <p>Happiness can also be reduced if a snorkeler gets too close to a dangerous creature. (Fortunately, nothing in this part of the ocean is lethal, but a scare from a shark makes a snorkeler less happy!) The penalty is equal to double the happiness score for that creature. Only one penalty for each kind of creature can be imposed.</p>
+
+  <p>The total happiness of the group is the sum of the happinesses of all members, and is what you are trying to maximize.</p>
+
+  <p>The ocean is divided up into a grid of square cells of side length one unit. A snorkeler can move orthogonally between adjacent cells in 2 minutes, and diagonally between cells in 3 minutes. Multiple snorkelers and creatures can occupy a single cell. Cells are numbered according to a cartesian coordinate system: the ocean is a (large) region with corners at (<em>-d</em>,<em>-d</em>) and (<em>d</em>,<em>d</em>) for some relatively large <em>d</em> (say 25 to 50). While we'll try different values of <em>d</em>, you can assume it's large enough that a single snorkeler cannot expect to explore the whole ocean during an 8-hour snorkeling expedition.</p>
+
+  <p>The iSnork has an inbuilt GPS, so that each snorkeler knows her current position. The iSnork also shows the current coordinates of all other snorkelers in the group.</p>
+  
+  <p>All snorkelers start at (0,0) (the position of the boat) and must finish at (0,0) at the end of the 8 hours. Each snorkeler that is not at the boat at the end of the day invokes a rescue penalty.</p>
+
+  <p>A snorkeler can see what's in cells up to <em>r</em> units away. (The center of a cell must be within <em>r</em> units of the snorkeler's cell center.) You can assume <code>r > 2</code>.</p>
+
+  <p>Some creatures (such as coral) are fixed, and do not move. Others (such as fish) move over time. If a creature is dangerous, being within a radius of 1.5 (i.e., in the same cell, or in an adjacent cell) invokes the reduction in happiness.</p>
+
+  <p>The neat thing about the iSnork is that snorkelers can inform each other about what they're seeing and/or doing. At the end of each minute, a snorkeler can press a key on the iSnork corresponding to a letter of the alphabet. This letter is then visible to other snorkelers in the group during the subsequent minute.</p>
+  
+  <p>For example, the snorkeling group might establish a convention that whenever anybody sees a clam, they transmit a 'C' on the iSnork. Using the GPS coordinates of the snorkeler together with this information, other snorkelers who want to see a clam could make their way to that region. The iSnork retains a complete history of GPS coordinates and letters transmitted for each minute since the beginning of the dive.</p>
+  
+  <p>You will write code that guides each snorkeler. Each snorkeler will be running the same code. To enable randomization, each snorkeler will have access to a different pseudo-random number generator. Snorkelers cannot communicate with each other, except via the iSnork. Snorkelers will be aware of the time, and of their surroundings. Snorkelers will see other creatures (and snorkelers) within a radius of <em>r</em> units from their position. Creatures will be labeled with their species and their id within the species. Using the id, the snorkeler can recognize that she's found an individual creature a second time, and won't count that creature in the running total of distinct creatures seen.</p>
+  
+  <p>Before the dive, snorkelers are briefed on the range of creatures that might be seen during a dive, including the happiness score, whether the creature is dangerous, whether the creature moves, and the number of creatures of that type appearing in the ocean. The data provided in this briefing are the same numbers used by the simulator to run the simulation.
+  </p>
+  
+  <p>Initially, all creatures are placed randomly by the simulator. Moving creatures execute a random walk as follows: They start facing one of the eight major compass directions at random. With probablility of 0.79 they continue in this direction. Each of the remaining seven directions has a probability of 0.03 of becoming the new direction for the current move. Once they reach the next cell (2 minutes for an orthogonal direction, 3 minutes for a diagonal direction) the procedure is repeated to choose a (possibly) new direction. Creatures cannot escape the grid: directions that lead off the grid will be rejected and a new direction will be chosen by the simulator until a valid choice is made.</p>
+  
+  <p>The number <em>n</em> of snorkelers in the group is a parameter. During the project, we'll discuss how the parameters <em>n</em>, <em>d</em> and <em>r</em> affect the strategy. We'll run tournaments at the end of the project for various combinations of these parameters, as chosen by the class. Note that the behavior of creatures is independent of the snorkelers; by using a separate seeded random number generator for the moving creatures, we can run the exact same creature simulation for different groups of snorkelers.</p>
+  
+  <p>Some things to think about:
+    
+    <ul>
+      
+      <li>The iSnork enables the group of snorkelers to search as a team. What kind of teamwork would be efficient for this problem?</li>
+      <li>How far out of one's way should one go to see something worthwhile?</li>
+      <li>Is it possible to communicate effectively about moving creatures, or will they be out of range before other snorkelers can get close?</li>
+    </ul>
+  </p>
+  
+</body>
+</html>

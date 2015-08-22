@@ -1,0 +1,124 @@
+<html>
+<head>
+  <title>Organisms</title>
+</head>
+
+<body>
+  <h1>Project 2: Organisms</h1>
+  
+  <p>Consider an electronic world consisting of an <em>m</em> by <em>n</em> grid. Virtual "organisms" can exist on this grid, with an organism able to occupy a cell on the grid. Organisms have energy that can be gained or lost in a variety of ways. When an organism runs out of energy it dies, and vacates the cell it formerly occupied. An organism can have at most <em>M</em> units of energy. An organism may do one of several things during a virtual time cycle:
+  </p>
+  
+  <ul>
+    <li> Move one cell horizontally or vertically in any direction. The world wraps, so that an organism traveling off the right edge of the grid appears on the left edge, and similarly for the top and bottom edges. A move uses some energy. </li>
+    <li> Stay put and do nothing. This move uses a small amount of energy. </li>
+    <li> Reproduce. An organism can split in two, placing a replica of itself on an adjacent square. Each resultant organism has slightly less than half of the initial energy of the original organism since reproduction costs some energy. </li>
+  </ul>
+  
+  <p>An illegal move (such as trying to move or reproduce onto an occupied square) results in a "stay put" outcome.
+  </p>
+  
+  <p>There will be food scattered over the grid. One unit of food corresponds to <em>u</em> units of energy. Food reproduces according to the following rules:
+  </p>
+  
+  <ul>
+    <li> An empty square has a small probability <em>p</em> of having a single unit of food "blow in".</li>
+    <li> For cells already containing food, but no organisms, every food unit on a nonempty square has a small probability <em>q</em> of doubling. This doubling is independent of other food units on the cell. So, a cell with three units of food may have anywhere between three and six units of food on the next cycle. Nevertheless, no cell may have more than <em>K</em> units of food at any one time, due to space constraints.</li>
+    <li> Cells with organisms never obtain additional food. (The organisms block the light.) In fact, an organism that is on a cell with food, and which has energy no larger than <em>M-u</em>, will consume a unit of food and add <em>u</em> units of energy to its store. If an organism is hungry, it can eat one unit of food per cycle until either the food runs out, or it achieves energy greater than <em>M-u</em>.</li>
+  </ul>
+  
+  <p>An organism has an <em>external</em> state that is an integer between 0 and 255. This state may be changed by the organism during the course of the simulation. The external state is visible to other organisms, as described below.
+  </p>
+  
+  <p>An organism can "see" in the four orthogonal directions. An organism gets information about:
+  </p>
+  
+  <ul>
+    <li> Whether there is food or not on a neighboring square (but not how much food). </li>
+    <li> Whether there is another organism on a neighboring square. If there is, then the external state of the neighboring organism is also available. </li>
+    <li> The amount of remaining food on the organism's current cell. </li>
+    <li> The amount of energy currently possessed by the organism. </li>
+    <li> Values of the simulator parameters <em>s</em>, <em>v</em>, <em>u</em>, <em>M</em>, and <em>K</em> (see below), but not <em>p</em>, <em>q</em>, <em>m</em>, or <em>n</em>. </li>
+  </ul>
+  
+  <p>An organism's "brain" is a program that you will write (in Java). Since there will be many organisms on the grid simultaneously, each will run a separate instance of the brain code. Each instance will have access only to the local environment of the organism. Organisms are placed randomly on the grid, and don't know their coordinates. The brain can keep a history of local events for the organism if you think that's useful.
+  </p>
+  
+  <p>Organisms cannot identify their neighbors. Neighbors may be of the same species (i.e., have the same programmed brain), or of a different species (i.e., have a different brain). This will be important for simulations in which multiple organisms from different groups are placed on the same grid. (How might you use the external state to help in identification? What about impostors?)
+  </p>
+  
+  <p>Organisms act one-at-a-time from top-left to bottom-right, row by row. We number the top-left cell as (1,1) and the bottom-right cell as <em>(m,n)</em>. That means that the state of the virtual world seen by an organism at <em>(x,y)</em> reflects the situation in which all organisms in positions <em>(x',y')</em> lexicographically less than <em>(x,y)</em> have already made their moves, while organisms in positions lexicographically after <em>(x,y)</em> have not yet moved. This convention allows all operations to happen without any need for resolving conflicts between organisms (for example trying to move to the same cell). However, it leads to some slightly unintuitive effects:
+  </p>
+  
+  <ul>
+    <li> An organism that is sensed to the west is usually in its final position for the cycle (can you think of an exception?), while an organism sensed to the east may or may not be in its final position. </li>
+    <li> An organism moving east can be sensed from the west, while an organism moving west cannot be sensed from the east. (There's an exception to this observation: what is it?) </li>
+  </ul>
+  
+  <p>We'll provide an organism "simulator" that reads in one or more organism brains, places one organism for each such brain randomly on the grid, and lets the organisms behave according to their brains' instructions.
+  </p>
+  
+  <p>There are several goals for this project:
+  </p>
+  
+  <ol>
+    <li> Your organism should be able to survive and replicate in an environment where it is the only kind of organism present. This may not be as easy as it sounds. Overpopulation may lead to consumption of all the food. If <em>p</em> is sufficiently small, extinction may ensue. The goal is to achieve the highest long-term stable population. </li>
+    <li> Your organism will be tested in environments containing other organisms. The goal here is primarily to survive, and secondarily to survive in higher numbers than competing organisms. Can your organisms populate the grid faster than their competitors? (Is that even the right strategy given the possibility of everybody going extinct?) How might you program your organisms to "recognize" different organisms based on their state and/or behavior? If you can distinguish members of your species, how might you behave differently to members of another species? Your goal here is not necessarily to obliterate other species, but to maximize the fraction of the population containing your brain. </li>
+    <li> In the discussion so far, we haven't limited the size of organisms' brains. How might your programs change if (to simulate an organism's limited brain size) we limited the complexity of the brain code? For example, what if we eliminated all looping constructs (while, for, etc.) from brains? </li>
+  </ol>
+  
+  <p>We'll run several simulations for each of these scenarios to see how the organisms behave. We'll also have some special categories of simulation, such as "best brain that fits on an 80x24 screen", etc.
+  </p>
+  
+  <p>There are several parameters mentioned in the project description. Values for the parameters will be selected in class in order to make the project most interesting. We'll run simulations for various combinations of parameters. Below is a summary of the parameters, their meaning, and likely values. The first four parameters are not known to the organism, while the remaining parameters are known.
+  </p>
+  
+  <table cellpadding="5" border="2">
+  <tr><th>Parameter</th>
+  <th>Meaning</th>
+  <th>Likely Values</th>
+  </tr>
+  <tr><td><em>m</em></td>
+  <td>horizontal size</td>
+  <td>5 to simulator screen width</td>
+  </tr>
+  <tr><td><em>n</em></td>
+  <td>vertical size</td>
+  <td>5 to simulator screen height</td>
+  </tr>
+  <tr><td><em>p</em></td>
+  <td>probability of spontaneous appearance of food</td>
+  <td>0.001-0.1</td>
+  </tr>
+  <tr><td><em>q</em></td>
+  <td>probability of food doubling</td>
+  <td>0.002-0.2</td>
+  </tr>
+  <tr><td><em>s</em></td>
+  <td>energy consumed in staying put</td>
+  <td>1 (other parameters scale)</td>
+  </tr>
+  <tr><td><em>v</em></td>
+  <td>energy consumed in moving or reproducing</td>
+  <td>2-20</td>
+  </tr>
+  <tr><td><em>u</em></td>
+  <td>energy per unit of food</td>
+  <td>10-500</td>
+  </tr>
+  <tr><td><em>M</em></td>
+  <td>maximum energy per organism</td>
+  <td>100-1000</td>
+  </tr>
+  <tr><td><em>K</em></td>
+  <td>maximum food units per cell</td>
+  <td>10-50</td>
+  </tr>
+  </table>
+  
+</body>
+</html>
+
+
+
+

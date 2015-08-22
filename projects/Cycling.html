@@ -1,0 +1,113 @@
+<html>
+<head>
+  <title>Olympic Cycling Race</title>
+</head>
+
+<body>
+  <h1>Project 3: Olympic Cycling Race</h1>
+  
+  <p>Since the 1912 Summer Olympics in Stockholm, Sweden, there has been a cycling event called the road race. In that event, riders ride for several hours (3 hours or more for the women, 5 or more for the men) over the local road system.
+  </p>
+  
+  <p>The most critical physical constraint in cycling is that a rider who rides without anybody in front of him/her absorbs all of the wind resistance. A rider riding immediately behind another rider uses 30% less energy than a rider riding in front.</p>
+  
+ <p> A simple strategy is to ride in line in a group, and to take turns leading the group. However, this can be an unstable strategy, because there is an short-term incentive for each rider to do less than their fair share in front. If the group cooperation breaks down, then each rider backs off to allow other riders to lead, and eventually a trailing group of riders can catch up. Thus there is a longer-term incentive for the group as a whole to cooperate.</p>
+
+  <p>While the race is theoretically an individual race, one can only succeed by riding in the context of a team. In the Olympics, teams are based on country, and each country optimizes its strategy for the success of one of its riders. The aim is to get the team's best rider into first place by having the other riders play supporting roles.</p>
+
+  <p>In real life, there are some relatively subtle strategies based on having riders with different abilities. For example, it is considered a bad idea to form a breakaway group with a rider who is a much better sprinter, because that rider will win out at the end of the race. Our project will simplify the problem by assuming that all riders are physically homogeneous. The race will therefore be won or lost on strategy alone.</p>
+
+  <p>Like the Olympics, we will focus on the first three places. A team scores 5 points for a gold medal, 3 points for silver, and 1 point for bronze. The ranks of other riders, including whether a rider finishes the race or not, do not matter.</p>
+  
+  <p>A rider has a certain quantity of <em>energy</em>, and all riders start with the same energy. Energy is used at differing rates during the race, as described below.</p>
+
+  <p>The course is divided up into <em>lanes</em>. There are many lanes, and riders can switch to adjacent lanes whenever they like (if there's space in the lane). Lanes abstract the concept of being behind (and therefore in the slipstream of) another rider. If rider A is in the same lane as B, and sufficiently close to the rear of B, then A's energy consumption will be reduced.</p>
+
+  <p>A bicycle is assumed to be 2 meters long, so that riders in the same lane must be at least 2 meters apart, measured from the front of each rider's bicycle. Riders cannot pass other riders in the same lane. To pass, a rider must move left or right to an adjacent lane, and then try to pass. If the adjacent lanes are occupied at a rider's position, then the rider cannot change lanes. If two riders simultaneously try to switch to the same lane, then the rider who is ahead has right of way. (In the unlikely event that two riders are at exactly the same position, the rider on the left, i.e., the one in the lane with the smaller number, has priority.) Note that the far-left and far-right lanes allow switching in only one direction. Two riders cannot exchange lanes if their positions overlap.</p>
+
+  <p>We will assume for this project that the course is flat and straight.</p>
+  
+  <p>Energy consumption per second is equal to <code>v^2.5</code> units where <em>v</em> is the speed of the rider. However, if there is a rider in the same lane at a distance <em>d</em> in front, then energy consumption is reduced by a factor <code>f(d)</code>, i.e., the energy required is multiplied by <code>(1-f(d))</code>. <code>f(d)=(5-d)/10</code> for <code>2 <= d <= 5</code>, and 0 otherwise. (Recall that <em>d</em> must be at least 2.) In other words, there is a 30% saving in energy for a rider immediately behind another rider, and that benefit decreases linearly to zero as <em>d</em> approaches 5.</p>
+  
+  <p>Every second, riders may adjust their status by:
+    
+    <ol>
+      <li>Moving to an adjacent lane, or staying in the same lane.</li>
+      <li>Speeding up, slowing down, or maintaining the same speed.</li>
+    </ol>
+  </p>
+  
+  <p>Speed adjustments (i.e., accelerations or decelerations) may be up to 1 meter per second per second. Changes of lane do not consume energy. Lane changes are processed by the system before the cyclists' progress for the next second is calculated. If a lane change fails because the target lane is occupied, then the rider continues in the current lane.</p>
+  
+  <p>The energy used during the previous second is calculated by the system (an integral of  <code>v^{2.5}(1-f(d))</code> with respect to time, over 1 second). In the event that the simulation takes too long, we might increase the simulation granularity from one second to ten seconds.
+  </p>
+  
+  <p>Even with an infinite energy budget, no rider may exceed 25 m/sec.</p>
+  
+  <p>If a rider's proposed acceleration would cause a collision with the rider in front, then the system will automatically reduce the speed of the following rider to avoid the collision. Thus, riders in front have the ability to set the pace for their lane, and can deliberately slow down the pace. By switching lanes, though, riders can pass a slow leader. (Question: Can a leader keep a follower behind by constantly changing lanes in front of them?)</p>
+
+  <p>Riders start with a fixed energy budget. Energy is subtracted from the budget each second. If a rider's energy drops to zero, then the rider drops out of the race. To simplify the dropping out process, the rider disappears immediately from the field, rather than slowing down and falling behind the other riders.</p>
+
+  <p>Each rider starts in a randomly assigned lane. The number of lanes will always be greater than the number of riders; riders will start alone in their assigned lane, without riders in front of them.</p>
+  
+  <p>Here are the parameters that will be used by the simulator:</p>
+  
+  <table cellpadding="5" border="2">
+  <tr><th>Parameter</th>
+  <th>Meaning</th>
+  <th>Likely Values</th>
+  </tr>
+  <tr><td><em>L</em></td>
+  <td>number of lanes</td>
+  <td>50</td>
+  </tr>
+  <tr><td><em>D</em></td>
+  <td>length of race in meters</td>
+  <td>180,000</td>
+  </tr>
+  <tr><td><em>T</em></td>
+  <td>number of teams in the race</td>
+  <td>5</td>
+  </tr>
+  <tr><td><em>R</em></td>
+  <td>number of riders per team</td>
+  <td>4</td>
+  </tr>
+  <tr><td><em>E</em></td>
+  <td>initial energy per rider</td>
+  <td>5,000,000</td>
+  </tr>
+  </table>
+  
+  <p><em>T</em> will probably be chosen to match the number of groups in the class.</p>
+
+  <p>With these parameters, a rider could ride alone at 9m/sec, using 243 units of energy per second. It would take 20,000 seconds to finish the race at this speed, which means a total energy consumption of 4,860,000, which is within the energy budget.</p>
+
+  <p>Riders are in touch with the team coaches by wireless phones, and follow team orders. Team coaches have access to complete information about the state of the race, including the positions, speeds, and remaining energy budgets of all riders. Each second, the team coach provides instructions for the rider, and those instructions (together with the instructions of the other coaches) are simulated by the project simulator.</p>
+  
+  <p>Some initial things to think about:
+    
+    <ul>
+      
+      <li>Is it worth sacrificing a team member early for the benefit of the other riders? Under what circumstances?</li>
+      <li>How does one plan the race given that future energy consumption is unknown?</li>
+      <li>Should a team try to separate its riders from the rest of the field (either in a different lane, or ahead/behind of the field) and pursue a specific optimized protocol? How does one make such a protocol robust to the presence of other riders?</li>
+    </ul>
+  </p>
+  
+  <p>We will run multiple tournaments, and calculate the average score per team over all tournaments. Players may learn the behavior of competing teams over time, and adjust their strategy accordingly. The extent to which groups are permitted to form meta-alliances will be decided during class discussion. For example, are the following legitimate?
+    
+    <ul>
+      
+      <li>Work against the team that has been winning previous events.</li>
+      <li>Groups 1 and 2 agree to cooperate and effectively become a double-sized team, alternating which team gets to have the winning rider.</li>
+    </ul>
+    
+  </p>
+  
+</body>
+</html>
+
+
+
+
