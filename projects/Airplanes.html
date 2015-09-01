@@ -1,0 +1,72 @@
+Programming & Problem Solving<br>
+Fall 2013<br>
+Project #4: Airplanes
+<p>
+Airplane traffic control (ATC) is responsible for helping aircraft navigation by identifying routes such that aircraft can get to their destinations as quickly as possible, but at the same time avoiding or preventing collisions with other aircraft.
+<p>
+In this project, you will implement an ATC strategy in which you are given a configuration file that specifies the following for a set of p planes:
+<ul>
+<li>the origin coordinates of the plane's flight</li>
+<li>the destination coordinates of the flight</li>
+<li>the departure time of the flight</li>
+</ul>
+<p>
+The origin and destination are given as Cartesian x/y-coordinates, with (0, 0) as the upper lefthand corner and (100,100) as the bottom right corner; planes may not leave this legal airspace. The departure time is given as the number of "steps" after the start of the simulation; a flight may not take off before its departure time, but it may leave afterward. 
+<p>
+Two planes that are in the air may not come with 5 units of each other, and planes may not move on the z-axis (just go with it, okay?). If two planes in the air come within 5 units of each other, the simulation will terminate.
+<p>
+In each step of the simulation, your ATC strategy will indicate the bearing (direction) of each of the p planes. At the start of the simulation, all planes are assumed to be on the ground, and have a bearing of -1. When a plane takes off, its bearing changes to its initial direction, with 0 being due north, 90 being due east, 180 being due south, and 270 being due west; a bearing of 360 is allowed (also due north), but after takeoff, any bearing less than 0 or greater than 360 will be considered illegal and the simulation will terminate.
+<p>
+Planes that are in the air move at a constant velocity of one unit per time step. Between each step, a plane's bearing may change by a maximum of ±10 degrees: a plane that is going due east (bearing 90) can change to a bearing between 80 and 100, but cannot simply make a sharp right turn and head directly to bearing 180 in one step. 
+<p>
+Once a plane reaches its destination, it lands and has its bearing changed to -2 to indicate that it is on the ground. The simulation ends when each plane has reached its destination.
+<p>
+The primary goal is to get all planes to their destinations in the fewest number of steps, without any planes taking off before their departure time or flying too close to each other.
+<p>
+A secondary metric that will be recorded is the amount of time the planes spend in the air; this is considered to be the amount of "power" used. Additionally, if a plane stays on the ground after its departure time, this is considered a "delay"; you should attempt to minimize this value, too. Keep in mind, though, that the focus is to get all planes to their destinations as quickly as possible without violating any of the restrictions.
+<p>
+Initially there will be only one ATC strategy per simulation, i.e. a single-player game. We will start with simple configurations and then move onto more complicated ones. If time permits, we may also investigate a multi-player game in which potentially different strategies are being used to get their planes to their destinations, and communication and cooperation between the players will be necessary.
+<p>
+Setting up the simulator<br>
+Download simulator version 1.0 as an Eclipse project from Canvas. To set it up:
+<ol>
+<li>Create a new Eclipse project called "Airplane1.0".</li>
+<li>Copy all of the content from the zip file that you downloaded into the workspace directory and refresh the Eclipse project. </li>
+<li>Add the .jar file to the project's Java Build Path. After a while, the project errors should disappear. </li>
+<li>Create a "Java Application" Run Configuration for the project with main class = airplane.sim.GameEngine and program arguments = "airplane.xml"</li>
+</ol>
+<p>
+When you run the project, you should see the simulator UI launch. You can configure:
+the Java class to use for your ATC strategy;
+the configuration file indicating each plane’s initial location, destination, and departure time;
+the delay of refreshing the UI.
+<p>
+To run a simulation:
+<ul>
+<li>Click "Begin New Game" to start the simulation. </li>
+<li>Click "Step" to move ahead one unit of time. </li>
+<li>Click "Play" to move continuously </li>
+<li>Click "Pause" to temporarily pause the game. </li>
+<li>Click "Resign" to quit.</li>
+</ul>
+<p>
+Creating your own player<br>
+Create a class called airplane.gX.GroupXPlayer where X is your group number. This class must: 
+extend airplane.sim.Player and
+implement the getName, startNewGame, and updatePlanes methods.
+See airplane.g0.SerializedPlayer for an example.
+<p>
+The startNewGame method is called at the beginning of the simulation, and provides a List of Plane objects, which include the current location (which, at this point, is its origin), destination, current bearing (which will be -1 since it's on the ground) and departure time of each flight.
+<p>
+Then, at each step in the simulation, the updatePlanes method is called. The parameters are the List of Plane objects (with their current location and bearing), the round number, and an array of bearings; your method should update and then return that array. Keep in mind that a bearing may only change ±10 on each step and be between 0 and 360 (inclusive); once a plane reaches or flies over its destination, the simulator will change its bearing to -2, indicating that it has landed.
+<p>
+To determine the bearing needed to get from point A to point B, you can call the calculateBearing method in the Player superclass.
+<p>
+Your player may also run simulations within the simulation, e.g. to determine whether planes will collide or how close they may get to each other before actually committing to those moves. At any point in your player's execution, it may call the startSimulation method. This will repeatedly call your player’s simulateUpdate callback method and then update the simulated planes accordingly. You may terminate the simulation at any point by calling stopSimulation. Otherwise, the simulation will run until all planes have reached their destinations, at which point startSimulation will finish. The return value of startSimulation is a SimulationResult object that indicates the time at which the simulation stopped, the reason for stopping (see the source code for the meaning of the different return values), and the List of Planes at the point when the simulation finished.
+<p>
+During the simulation-within-simulation, the Planes in the List are just copies of the "real" Planes, so you do not have to worry about affecting them. The simulator does not currently handle simulations-within-simulations-within-simulations, so be careful about doing things recursively.
+<p>
+To add your Player to the application, add the name of your class to airplane.xml in the "airplane .classes" entry (if you have more than one, the class names should be separated by whitespace).
+<p>
+Note: To do logging/debugging, do not use System.out.println or System.err.println. Rather, create a Logger instance (see SerializedPlayer for an example) and then call its trace, debug, info, warn, or error method and pass the String to appear in the console.
+
