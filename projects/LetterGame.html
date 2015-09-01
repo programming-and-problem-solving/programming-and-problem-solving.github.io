@@ -1,0 +1,573 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+
+</head>
+<body lang="en-US" text="#000000" link="#0000ff" dir="ltr">
+<p style="margin-bottom: 0in"><b>Programming</b><b> </b><b>&amp;</b><b> </b><b>Problem</b><b>
+</b><b>Solving</b></p>
+<p style="margin-bottom: 0in"><b>Letter</b><b> </b><b>Game</b></p>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<p align="justify" style="margin-bottom: 0in">In this project, you'll
+implement a player in a game similar to Scrabble, with the difference
+being that your player will bid on letters in an attempt to get the
+"good" ones. The goal is to implement a bidding strategy that
+will help you form better words and accrue more points.</p>
+<p align="justify" style="margin-bottom: 0in"><br/>
+
+</p>
+<p align="justify" style="margin-bottom: 0in">A game consists of <i>r
+</i>rounds, and a round consists of 7<i>p</i> bids, in which <i>p</i>
+is the number of players (maximum 14); players are only allowed to
+get 7 letters per round. At the end of each round, points are awarded
+for the word that is created, and then we move onto the next round.
+At the end of the final round, the player with the most points wins.</p>
+<p align="justify" style="margin-bottom: 0in"><br/>
+
+</p>
+<p align="justify" style="margin-bottom: 0in">There is a common pool
+of 98 letters distributed as in Scrabble, but without the blanks. At
+the start of a round, each player starts with <em>n</em> concealed
+letters known only to that player, with <em>n</em> anywhere from 0 to
+6. Players then bid for letters, with each letter in turn (appearing
+in random order) going to the highest bidder. In a single round,
+letters are selected without replacement, so once somebody has the
+single 'Z' nobody else will have a 'Z'. Letters are reset at
+the start of a new round.</p>
+<p align="justify" style="margin-bottom: 0in"><br/>
+
+</p>
+<p align="justify" style="margin-bottom: 0in">Players bid with
+points. Each player starts with 100 points to enable them to bid at
+the start of the game. As the round progresses, the point total will
+change as the players lose points to get letters, then gain points at
+the end of the round as they create words. A player cannot bid more
+points than he/she possesses, and a bid of zero points is allowed.
+Past bids are public information: every player knows how much each
+player has bid on each letter. 
+</p>
+<p align="justify" style="margin-bottom: 0in"><br/>
+
+</p>
+<p align="justify" style="margin-bottom: 0in">Players submit a single
+bid for each letter, and all bids are made simultaneously, without
+knowledge of other players' bids for that letter. The player who
+obtains the letter is determined according to the rules of a Vickrey
+Auction: the player who bids the most is the winner, but the amount
+they pay is that of the second-highest bid. If there is a tie for the
+high bid, the simulator will choose among the highest bids randomly. 
+</p>
+<p align="justify" style="margin-bottom: 0in"><br/>
+
+</p>
+<p align="justify" style="margin-bottom: 0in">After all 7<i>p</i>
+letters have been auctioned off in the round, each player tries to
+make as high-scoring a word as they can. A word will be considered
+valid if and only if it appears in a standard word list that we will
+supply. A word scores exactly what the word would have scored in
+Scrabble according to the points associated with the letters. In
+addition, a player who uses all seven letters receives a 50 point
+bonus. There is no bonus for words containing fewer than seven
+letters. The score is added to the player's total score, and the game
+continues with the next round. 
+</p>
+<p align="justify" style="margin-bottom: 0in"><br/>
+
+</p>
+<p align="justify" style="margin-bottom: 0in">Future variants we may
+explore include:</p>
+<ul>
+	<li/>
+<p align="justify" style="margin-bottom: 0in">allowing players
+	to acquire more than 7 letters per round</p>
+	<li/>
+<p align="justify" style="margin-bottom: 0in">increasing the
+	number of letters that are offered in each round</p>
+</ul>
+<p class="western" align="justify" style="margin-bottom: 0in"><br/>
+
+</p>
+<p class="western" align="center" style="margin-bottom: 0in; page-break-before: always">
+<u><b>Letter</b></u><u><b> </b></u><u><b>Counts</b></u><u><b> </b></u><u><b>and</b></u><u><b>
+</b></u><u><b>Scores</b></u></p>
+<p class="western" align="center" style="margin-bottom: 0in"><br/>
+
+</p>
+<p class="western" align="center" style="margin-bottom: 0in"><br/>
+
+</p>
+<table width="577" cellpadding="4" cellspacing="0">
+	<col width="183">
+	<col width="184">
+	<col width="184">
+	<tr valign="top">
+		<td width="183" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center"><b>Letter</b></p>
+		</td>
+		<td width="184" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center"><b>Count</b><b> </b><b>(out</b><b>
+			</b><b>of</b><b> </b><b>98)</b></p>
+		</td>
+		<td width="184" style="border: 1px solid #000000; padding: 0.04in">
+			<p class="western" align="center"><b>Score</b></p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">A</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">9</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">1</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">B</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">2</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">3</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">C</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">2</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">3</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">D</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">4</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">2</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">E</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">12</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">1</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">F</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">2</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">4</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">G</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">3</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">2</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">H</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">2</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">4</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">I</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">9</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">1</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">J</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">1</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">8</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">K</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">1</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">5</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">L</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">4</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">1</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">M</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">2</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">3</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">N</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">6</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">1</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">O</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">8</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">1</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">P</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">2</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">3</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">Q</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">1</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">10</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">R</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">6</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">1</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">S</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">4</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">1</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">T</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">6</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">1</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">U</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">4</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">1</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">V</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">2</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">4</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">W</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">2</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">4</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">X</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">1</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">8</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">Y</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">2</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">4</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="183" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">Z</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p class="western" align="center">1</p>
+		</td>
+		<td width="184" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p class="western" align="center">10</p>
+		</td>
+	</tr>
+</table>
+<p class="western" align="center" style="margin-bottom: 0in"><br/>
+
+</p>
+<p class="western" align="center" style="margin-bottom: 0in"><br/>
+
+</p>
+<p class="western" style="margin-bottom: 0in"><br/>
+
+</p>
+<p class="western" style="margin-bottom: 0in"><br/>
+
+</p>
+<p class="western" style="margin-bottom: 0in; page-break-before: always">
+<u><b>Setting</b></u><u><b> </b></u><u><b>up</b></u><u><b> </b></u><u><b>the</b></u><u><b>
+</b></u><u><b>simulator</b></u></p>
+<p class="western" style="margin-bottom: 0in">Download the simulator
+as an Eclipse project from Blackboard. To set it up:</p>
+<ol>
+	<li/>
+<p class="western" style="margin-bottom: 0in">Create a new
+	Eclipse project called "LetterGame1.0".</p>
+	<li/>
+<p class="western" style="margin-bottom: 0in">Copy all of the
+	content from the tar file that you downloaded into the workspace
+	directory and refresh the Eclipse project. 
+	</p>
+	<li/>
+<p class="western" style="margin-bottom: 0in">Add the .jar
+	file to the project's Java Build Path. After a while, the project
+	errors should disappear. 
+	</p>
+	<li/>
+<p class="western" style="margin-bottom: 0in">Create a &quot;Java
+	Application&quot; Run Configuration for the project with main class
+	= lettergame.ui.GameEngine 
+	</p>
+</ol>
+<p class="western" style="margin-bottom: 0in"><br/>
+
+</p>
+<p class="western" style="margin-bottom: 0in">When you run the
+project, you should see the simulator UI launch.</p>
+<p class="western" style="margin-bottom: 0in"> 
+</p>
+<p class="western" style="margin-bottom: 0in">You can configure the
+number of hidden letters (that are assigned secretly at the beginning
+of a round) and the number of rounds in the game. 
+</p>
+<p class="western" style="margin-bottom: 0in"><br/>
+
+</p>
+<p class="western" style="margin-bottom: 0in">To add a player to the
+game, select it from the dropdown list and click "Add Player".
+Start with lettergame.g0.RandomPlayer.</p>
+<p class="western" style="margin-bottom: 0in"><br/>
+
+</p>
+<p class="western" style="margin-bottom: 0in">Click &quot;Begin New
+Game&quot; to start a new game; this will take a few seconds at first
+as it loads the dictionary (which is in textFiles/dictionary.txt)</p>
+<p class="western" style="margin-bottom: 0in">Click &quot;Step&quot;
+to move ahead one letter. You will see info about who won the bid in
+the lower right corner, and more details in the console output.</p>
+<p class="western" style="margin-bottom: 0in">Click &quot;Play&quot;
+to play continuously (configure the Delay with the slider at the
+bottom right) 
+</p>
+<p class="western" style="margin-bottom: 0in">Click &quot;Pause&quot;
+to temporarily pause the game. 
+</p>
+<p class="western" style="margin-bottom: 0in"><br/>
+
+</p>
+<p class="western" style="margin-bottom: 0in"><br/>
+
+</p>
+<p class="western" style="margin-bottom: 0in"><u><b>Creating</b></u><u><b>
+</b></u><u><b>your</b></u><u><b> </b></u><u><b>own</b></u><u><b>
+</b></u><u><b>player</b></u></p>
+<p class="western" style="margin-bottom: 0in">Create a class called
+lettergame.gX.GroupXPlayer where X is your group number. This class
+must extend the abstract class lettergame.ui.Player, which means
+implementing the various methods:</p>
+<ul>
+	<li/>
+<p class="western" style="margin-bottom: 0in">newGame: this is
+	called at the beginning of a new game; it gives you your ID and
+	tells you how many rounds are in the game and how many players there
+	are (including you)</p>
+	<li/>
+<p class="western" style="margin-bottom: 0in">newRound: this
+	is called at the start of a round within a game; it gives you your
+	initial secret state (including your score and any secret letters
+	you've been assigned), as well as the current round number</p>
+	<li/>
+<p class="western" style="margin-bottom: 0in">getBid: this is
+	called each time your player is asked to bid on a letter; in
+	addition to the letter you're bidding on, there's info about
+	past bids, too; this method is not called if you already have 7
+	letters, though</p>
+	<li/>
+<p class="western" style="margin-bottom: 0in">bidResult: this
+	is called after the winner of the bid has been decided; if you won
+	the bid, be sure to add the letter to currentLetters</p>
+	<li/>
+<p class="western" style="margin-bottom: 0in">getWord: this is
+	called at the end of the round; you're asked which word you'd
+	like to form out of your currentLetters; if you return a word that
+	you're not legally allowed to make (because you don't have the
+	right letters, or if it's not in the dictionary), the word will be
+	ignored</p>
+	<li/>
+<p class="western" style="margin-bottom: 0in">updateScores:
+	called at the end of a round, when the scores are updated</p>
+</ul>
+<p class="western" style="margin-bottom: 0in"><br/>
+
+</p>
+<p class="western" style="margin-bottom: 0in">The Player class also
+includes these fields:</p>
+<ul>
+	<li/>
+<p class="western" style="margin-bottom: 0in">logger: for
+	logging (don't use System.out.println)</p>
+	<li/>
+<p class="western" style="margin-bottom: 0in">currentLetters:
+	ArrayList of all the letters you've won so far</p>
+	<li/>
+<p class="western" style="margin-bottom: 0in">myID: so that
+	you know who you are</p>
+	<li/>
+<p class="western" style="margin-bottom: 0in">wordlist:
+	ArrayList of all the words in the dictionary</p>
+</ul>
+<p class="western" style="margin-bottom: 0in"><br/>
+
+</p>
+<p class="western" style="margin-bottom: 0in">See
+lettergame.g0.RandomPlayer for an example and some documentation.</p>
+<p class="western" style="margin-bottom: 0in"><br/>
+
+</p>
+<p class="western" style="margin-bottom: 0in">About the rest of the
+API:</p>
+<ul>
+	<li/>
+<p class="western" style="margin-bottom: 0in">To know what a
+	letter's value is, use the Letter's getValue method</p>
+	<li/>
+<p class="western" style="margin-bottom: 0in">Use the static
+	methods in LetterGameValues to find out word score, letter score,
+	letter frequency</p>
+</ul>
+<p class="western" style="margin-bottom: 0in"><br/>
+
+</p>
+<p class="western" style="margin-bottom: 0in">The getWord() method in
+RandomPlayer contains code that will create the best-scoring word
+from the letters that you have acquired, though you are certainly not
+obligated to use this code. 
+</p>
+<p class="western" style="margin-bottom: 0in"><br/>
+
+</p>
+<p class="western" style="margin-bottom: 0in">To add your Player to
+the application, add the name of your class to the file
+Game.playerlist (if you have more than one, the class names should be
+separated by newlines, i.e. one per line).</p>
+</body>
+</html>
